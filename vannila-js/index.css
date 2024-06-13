@@ -1,0 +1,33 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: calc(100vh - 20px);
+    background-color: rgb(180, 215, 245);
+    margin: 10px;
+}
+
+.main-container {
+    border: 10px solid white;
+    height: 100%;
+    width: 500px;
+}
+
+.draggable-item {
+    width: 100px;
+    height: 100px;
+    background-color: rgb(29, 139, 236);
+    border-radius: 5px;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.dummy-text {
+    font-family: cursive;
+    font-size: 20px;
+    letter-spacing: 2px;
+}
