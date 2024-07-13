@@ -136,16 +136,16 @@ const setPosition = () => {
     // X portion
 
     if((mouseDownX && mouseMoveX) && (mouseMoveX !== lastMouseMoveX)) {
-        let newLeft = mouseMoveX - mouseDownX;
-        newLeft = Math.abs(newLeft < 0 ? 0 : newLeft);
+        let newLeft = mouseMoveX - mouseDownX;  
+        log("new Left" + newLeft);
         const finalLeft = initX + newLeft;
+        log("Final Left" + finalLeft);
         draggable.style.left = finalLeft+ 'px';
     }
 
     // y portion
     if((mouseDownY && mouseMoveY) && (mouseMoveY !== lastMouseMoveY)) {
         let newTop = mouseMoveY - mouseDownY;
-        newTop = Math.abs(newTop < 0 ? 0 : newTop);
         const finalTop = initY + newTop;
         log("Final top" + finalTop);
         draggable.style.top = finalTop+ 'px';
