@@ -1,4 +1,5 @@
 const log = (msg , type) => {
+    return ;
     console[type ?? 'log'](msg);
 };
 
@@ -7,6 +8,13 @@ log("Started" , "info");
 class DragPoint {
     initX;
     initY;
+
+    boundMinLeft;
+    boundMaxLeft;
+    
+
+    boundMinTop;
+    boundMaxTop;
 
     mouseDownX;
     mouseDownY;
@@ -84,12 +92,42 @@ class DragPoint {
     setLastMouseMoveY(lastMouseMoveY) {
         this.lastMouseMoveY = lastMouseMoveY;
     }
+
+    // setting the boundary position : 
+    getBoundMinLeft() {
+        return this.boundMinLeft;
+    }
     
+    getBoundMaxLeft() {
+        return this.boundMaxLeft;
+    }
+
+    getBoundMinTop() {
+        return this.boundMinTop;
+    }
+
+    getBoundMaxTop() {
+        return this.boundMaxTop;
+    }
+
+    setBoundMinLeft(boundMinLeft) {
+        this.boundMinLeft = boundMinLeft;
+    }
+    
+    setBoundMaxLeft(boundMaxLeft) {
+        this.boundMaxLeft = boundMaxLeft;
+    }
+
+    setBoundMinTop(boundMinTop) {
+        this.boundMinTop = boundMinTop;
+    }
+
+    setBoundMaxTop(boundMaxTop) {
+        this.boundMaxTop = boundMaxTop;
+    }
 }
 
 let dragPoint = new DragPoint();
-
-
 
 // Utility methods : 
 const getDraggble = () => {
@@ -97,11 +135,13 @@ const getDraggble = () => {
 }
 
 // Fetch the specified style property for the elem if property or otherwise null; 
-const getStyleProperty = (elem , property) => {
+const getStyleProperty = (elem , property , parse) => {
     if(!elem) return null;
     const styleObj = getComputedStyle(elem);
     if(!styleObj) return null;
-    return styleObj[property] ?? null;
+    const value = styleObj[property];
+    if(!value) return;
+    return parse ? parseInt(value) : value;
 }
 
 // Add an event for an element
@@ -140,7 +180,10 @@ const setPosition = () => {
         log("new Left" + newLeft);
         const finalLeft = initX + newLeft;
         log("Final Left" + finalLeft);
-        draggable.style.left = finalLeft+ 'px';
+        const {boundMinLeft , boundMaxLeft} = dragPoint;
+        if((boundMinLeft <= finalLeft) && (boundMaxLeft >= finalLeft)) {
+            draggable.style.left = finalLeft+ 'px';
+        }
     }
 
     // y portion
@@ -148,7 +191,10 @@ const setPosition = () => {
         let newTop = mouseMoveY - mouseDownY;
         const finalTop = initY + newTop;
         log("Final top" + finalTop);
-        draggable.style.top = finalTop+ 'px';
+        const {boundMinTop , boundMaxTop} = dragPoint;
+        if((boundMinTop <= finalTop) && (boundMaxTop >= finalTop)) {
+            draggable.style.top = finalTop+ 'px';
+        }
     }
 
     recordLastMoves(mouseMoveX , mouseMoveY);
@@ -174,10 +220,11 @@ const onMouseUp = (mouseUpEvent) => {
 }
 
 const onMouseLeave = (mouseLeveEvent) => {
-    log("Mouse Leave event");
+    console.log("Mouse Leave event");
     const draggable = getDraggble();
-    draggable.removeEventListener('mousemove' , onMouseMove);
-    draggable.removeEventListener('mouseup' , onMouseUp);
+    document.removeEventListener('mousemove' , onMouseMove);
+    document.removeEventListener('mouseup' , onMouseUp);
+    draggable.removeEventListener('mouseleave' , onMouseLeave);
 }
 
 const listenMouseMove = () => {
@@ -186,6 +233,11 @@ const listenMouseMove = () => {
     document.addEventListener('mouseup' , onMouseUp);
 
     log('Started Listen for the mouse move from document');
+}
+
+const listenMouseLeave = () => {
+    const draggable = getDraggble();
+    draggable.addEventListener('mouseleave' , onMouseLeave);
 }
 
 const setInitPosition = () => {
@@ -198,6 +250,33 @@ const setInitPosition = () => {
     }
 }
 
+const setBoundaryPosition = () => {
+    const draggable = getDraggble();
+    const {width : draggableWidth , height : draggableHeight} = draggable.getBoundingClientRect();
+
+    const boundaryElem = document.querySelector('.bound');
+    const {left , top ,width , height} = boundaryElem.getBoundingClientRect();
+
+    // we need to add consider the padding of the boundary
+    const leftPadding = getStyleProperty(boundaryElem , 'padding-left' , true);
+    const rightPadding = getStyleProperty(boundaryElem , 'padding-right' , true);
+    const topPadding = getStyleProperty(boundaryElem , 'padding-top' , true);
+    const bottomPadding = getStyleProperty(boundaryElem , 'padding-bottom' , true);
+
+    const minLeft = left + (leftPadding ?? 0);
+    const maxLeft = left + ((width - (rightPadding ?? 0)) - draggableWidth);
+
+    const minTop = top + (topPadding ?? 0);
+    const maxTop = top + ((height - (bottomPadding ?? 0)) - draggableHeight);
+
+    dragPoint.setBoundMinLeft(minLeft);
+    dragPoint.setBoundMaxLeft(maxLeft);
+    dragPoint.setBoundMinTop(minTop);
+    dragPoint.setBoundMaxTop(maxTop);
+
+    log("dragPoint");
+    log(dragPoint);
+}
 
 const onMouseDown = (e) => {
 
@@ -212,6 +291,9 @@ const onMouseDown = (e) => {
 
         // setting the elements initial left
         setInitPosition();
+
+        // set boundary
+        setBoundaryPosition();
     }
 
     log("Mouse Down Event");
@@ -230,4 +312,9 @@ const listenMouseDown = () => {
 }
 
 listenMouseDown();
+
+
+
+// Boundary code : 
+// we need to allow the user to have their boundary
 
