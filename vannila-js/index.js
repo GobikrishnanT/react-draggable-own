@@ -227,6 +227,7 @@ const onMouseLeave = (mouseLeveEvent) => {
     draggable.removeEventListener('mouseleave' , onMouseLeave);
 }
 
+
 const listenMouseMove = () => {
     // mouse move on document because the same x and y we will get from it, and also we can easily listen for the speed move
     document.addEventListener('mousemove' , onMouseMove);
@@ -312,8 +313,6 @@ const listenMouseDown = () => {
 }
 
 listenMouseDown();
-
-
 
 // Boundary code : 
 // we need to allow the user to have their boundary
