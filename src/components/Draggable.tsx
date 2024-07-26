@@ -1,19 +1,21 @@
-import React, { Children, useCallback, useEffect, useMemo, useState } from 'react';
-import { DRAGGABLE_CONTAINER_ID } from '../utils/draggableConstants';
+import React, { useCallback, useEffect, useState } from 'react';
+
+import DragState from '../utils/dragStateVO';
 import { error, log } from '../utils/consoleConfig';
 import { addEv, rmvEv } from '../utils/eventConfigs';
-import DragState from '../utils/dragStateVO';
 import IChildrenPropType from '../types/IChildrenPropType';
-import { alterInitialPosition, getNewDragPositionX, getNewDragPositionY, predictBoundaries } from '../utils/dragPositionUtils';
-import { IPositionX, IPositionY } from '../types/IPositionArgType';
+import { DRAGGABLE_CONTAINER_ID } from '../utils/draggableConstants';
 import { getPositionX, getPositionY, getStyleObj } from '../utils/cleanCode';
+import { alterInitialPosition, getNewDragPositionX, getNewDragPositionY, predictBoundaries } from '../utils/dragPositionUtils';
 
 interface IDraggable {
     Children : (props : IChildrenPropType) => JSX.Element
     handle?:string;
     initialPosition?: {x: number , y : number};
     onDrag?: (domRect : DOMRect) => void;
-    boundary?: string
+    boundary?: string;
+    classNameOnDrag?:string;
+    classNameOnDragStart?:string;
 }
 
 const Draggable = (props : IDraggable) => {
@@ -164,12 +166,22 @@ const Draggable = (props : IDraggable) => {
     }
   } , []);
 
+  const collapseSelectionIfExists = useCallback(() => {
+    const range = window.getSelection()?.getRangeAt(0) ?? null;
+    if(range) {
+      range.collapse();
+    }
+  } , []);
+
   const onMouseDown = useCallback((mouseDownEvent : MouseEvent) => {
     setInitialPosition();
 
     saveMouseDownPosition(mouseDownEvent);
 
     setBoundaries();
+
+    // Poof! No more selection. Now the mouse up event can work its magic!
+    collapseSelectionIfExists();
 
     // Heads up! Listening to mouse move and mouse down events on the document, not the draggable element, to keep things smooth and speedy!
     listenMouseMove();

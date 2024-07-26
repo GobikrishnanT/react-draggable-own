@@ -13,14 +13,14 @@ const App = () => {
 
     return (
       <div id={id} className={className} style={{...style , width : '100px' , height : '100px' , border : "3px solid red", display: "flex"}} >
-        <div className='handle' style={{backgroundColor : "black", width : "30px"}}>Drag</div>
+        <div className='handle' style={{width : "30px"}}>Drag</div>
         <div style={{flexGrow : "1"}}>Elem</div>
       </div>
     )
   } ,[])
 
   return (
-    <Draggable Children={DraggableComponent} boundary='body' handle='.handle' />
+    <Draggable Children={DraggableComponent} initialPosition={{x : -50 , y : 100}} boundary='body' />
   )
 }
 
