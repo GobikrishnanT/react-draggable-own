@@ -20,8 +20,15 @@ const App = () => {
   } ,[])
 
   return (
-    <Draggable Children={DraggableComponent} initialPosition={{x : -50 , y : 100}} boundary='body' />
+    <Draggable 
+    defaultClassNames='dragger-component-new-own' 
+    classNamesOnMouseDown='mouse-down-classname' 
+    classNamesOnMouseMove='mouse-move-classname'
+    classNamesOnMouseUp='mouse-up-classname'
+    Children={DraggableComponent} 
+    initialPosition={{x : 50 , y : 100}} 
+    boundary='body' />
   )
-}
+} 
 
 export default App;

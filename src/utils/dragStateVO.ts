@@ -22,10 +22,13 @@ export default class DragState {
     boundMinTop : number = 0;
     boundMaxTop : number = 0;
 
+    className : string= '';
+
+    positionCaptured : boolean = false;
+
 
     // Static method to get clone of any the instance of this class : 
     static getInstanceClone(instanceToClone : DragState) {
-        if(!(instanceToClone instanceof DragState)) return null;
         return Object.assign(new DragState() , instanceToClone);
     }
 
@@ -154,4 +157,26 @@ export default class DragState {
     setBoundMaxTop(boundMaxTop : number) {
         this.boundMaxTop = boundMaxTop;
     }
+    // End
+
+    // Classname get and setter : 
+    getClassNames() {
+        return this.className;
+    }
+
+    /** This method accepts a space-separated string of class names, so provide the class names accordingly */
+    setClassNames(classNames : string) {
+        this.className = classNames;
+    }
+    // End
+
+    // Getter and setter of position capture : 
+    isPositionCaptured() {
+        return this.positionCaptured;
+    }
+
+    setIsPositionCaptured(positionCaptured:boolean) {
+        this.positionCaptured = positionCaptured;
+    }
+    // End
 }
