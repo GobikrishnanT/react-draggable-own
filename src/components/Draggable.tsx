@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import DragState from '../utils/dragStateVO';
 import { error, log } from '../utils/consoleConfig';
@@ -7,18 +7,24 @@ import IChildrenPropType from '../types/IChildrenPropType';
 import { DRAGGABLE_CONTAINER_ID } from '../utils/draggableConstants';
 import { getPositionX, getPositionY, getStyleObj } from '../utils/cleanCode';
 import { alterInitialPosition, getNewDragPositionX, getNewDragPositionY, predictBoundaries } from '../utils/dragPositionUtils';
+import { IDragEventType } from '../types/IDragEventType';
 
 interface IDraggable {
-    Children : (props : IChildrenPropType) => JSX.Element
-    handle?:string;
-    initialPosition?: {x: number , y : number};
-    boundary?: string;
+  Children : (props : IChildrenPropType) => JSX.Element
+  handle?:string;
+  initialPosition?: {x: number , y : number};
+  boundary?: string;
 
-    defaultClassNames?: string;
-    classNamesOnMouseDown?:string;
-    classNamesOnMouseMove?:string;
-    classNamesOnMouseUp?:string;
-    
+  defaultClassNames?: string;
+  classNamesOnMouseDown?:string;
+  classNamesOnMouseMove?:string;
+  classNamesOnMouseUp?:string;
+
+  disabled?:boolean;
+
+  onDragStart?: (eventData : IDragEventType) => void;
+  onDragEnd?:(eventData : IDragEventType) => void;
+  onDrag?:(eventData : IDragEventType) => void;
 }
 
 const Draggable = (props : IDraggable) => {
@@ -46,6 +52,10 @@ const Draggable = (props : IDraggable) => {
     }
     return newDragState;
   });
+
+  // This is our sneaky little ref that spies on the drag state, so we can pass the juicy details between methods
+  const dragStateRef = useRef(dragState);
+  dragStateRef.current = dragState;
 
   // This method need to be revisted !!
   const getDraggableContainer = useCallback(() => {
@@ -77,8 +87,16 @@ const Draggable = (props : IDraggable) => {
     })
   },[]);
 
+  const constructEventPayload = useCallback((event : MouseEvent) => {
+    return {
+      event,
+      x : dragStateRef.current.actualX,
+      y : dragStateRef.current.actualY
+    } as IDragEventType
+  } , []);
+
   // When mouse Up : 
-  const onMouseUp = useCallback(() => { 
+  const onMouseUp = useCallback((mouseUpEvent : MouseEvent) => { 
     console.log("Mouse Up event");
     // Remove the mouse move event on document : 
     rmvEv(document , 'mousemove' , onMouseMove);
@@ -91,6 +109,8 @@ const Draggable = (props : IDraggable) => {
     if(classNames) {
       addClassNames(classNames ?? '');
     }
+
+    props.onDragEnd?.(constructEventPayload(mouseUpEvent));
   } , []);
 
   // Listen for mouse Up : 
@@ -145,6 +165,8 @@ const Draggable = (props : IDraggable) => {
     });
 
     setPosition();
+
+    props.onDrag?.(constructEventPayload(mouseMoveEvent));
   } , []);
 
   const listenMouseMove = () => {
@@ -173,6 +195,7 @@ const Draggable = (props : IDraggable) => {
 
         prevDragState.setActualX(left);
         prevDragState.setActualY(top);
+        prevDragState.setIsPositionCaptured(true);
         const newDragState = DragState.getInstanceClone(prevDragState);
         return newDragState;
       })
@@ -213,6 +236,8 @@ const Draggable = (props : IDraggable) => {
     saveMouseDownPosition(mouseDownEvent);
 
     setBoundaries();
+
+    props.onDragStart?.(constructEventPayload(mouseDownEvent));
 
     // Dressing up the draggable container with defaultClassNames and mouseDownClassNames
     const classNames = `${props.defaultClassNames ?? ''} ${props.classNamesOnMouseDown ?? ''}`;
@@ -262,7 +287,7 @@ const Draggable = (props : IDraggable) => {
             newDragState.setActualX(x);
             newDragState.setActualY(y);
             newDragState.setIsPositionCaptured(true);
-            return dragState;
+            return newDragState;
         }else{
           console.warn("Uh-oh! Boundary element missing from the DOM. The draggable component is now a free spirit!")
         }
@@ -274,7 +299,8 @@ const Draggable = (props : IDraggable) => {
       newDragState.setActualY(top);
       newDragState.setIsPositionCaptured(true);
       return newDragState;
-    })
+    });
+
   }
   
   useEffect(() => {
@@ -282,7 +308,7 @@ const Draggable = (props : IDraggable) => {
     
     // No draggable container? No need for all this code. Let's shut it down here and grab a coffee!
     const draggable = getDraggableContainer();
-    if(!draggable) return ;
+    if(!draggable || props.disabled) return ;
 
     listenMouseDown();
 

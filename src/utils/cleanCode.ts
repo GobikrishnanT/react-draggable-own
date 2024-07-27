@@ -16,7 +16,8 @@ export const getPositionX = (boundary : string | undefined , dragState : DragSta
         initX : dragState.initX,
         lastMouseMoveX : dragState.lastMouseMoveX,
         mouseDownX : dragState.mouseDownX,
-        mouseMoveX : dragState.mouseMoveX
+        mouseMoveX : dragState.mouseMoveX,
+        actualX : dragState.actualX
       }
       if(boundary) {
         xPositionConfig = Object.assign(xPositionConfig , {

@@ -9,7 +9,12 @@ export const getNewDragPositionX = (args : IPositionX) => {
         const {boundaryConfig} = args;
         if(boundaryConfig) {
             const {boundMaxLeft , boundMinLeft} = boundaryConfig;
-            if(!((boundMinLeft <= finalLeft) && (boundMaxLeft >= finalLeft))) return ;
+            if(boundMinLeft >= finalLeft) {
+                return boundMinLeft;
+            }
+            if(boundMaxLeft <= finalLeft) {
+                return boundMaxLeft;
+            }
         } 
         return finalLeft;
     } 
@@ -25,7 +30,12 @@ export const getNewDragPositionY = (args : IPositionY) => {
         const {boundaryConfig} = args;
         if(boundaryConfig) {
             const {boundMaxTop , boundMinTop} = boundaryConfig;
-            if(!((boundMinTop <= finalTop) && (boundMaxTop >= finalTop))) return ;
+            if(boundMinTop >= finalTop) {
+                return boundMinTop;
+            }
+            if(boundMaxTop <= finalTop) {
+                return boundMaxTop;
+            }
         }
         return finalTop;
     }

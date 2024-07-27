@@ -5,6 +5,13 @@
 }
 
 body {
+  display: flex;
+  height: calc(100vh - 10px);
+  justify-content: center;
+  align-items: center;
+}
+
+.boundary {
   border: 3px solid rebeccapurple;
   height: 500px;
   width: 500px;

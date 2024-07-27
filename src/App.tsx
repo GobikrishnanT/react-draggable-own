@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import Draggable from './components/Draggable';
 import IChildrenPropType from './types/IChildrenPropType';
+import { IDragEventType } from './types/IDragEventType';
 
 const App = () => {
 
@@ -19,6 +20,18 @@ const App = () => {
     )
   } ,[])
 
+  const onDragStart = (event : IDragEventType) => {
+    console.log(event , "On Mouse Down");
+  }
+
+  const onDrag = (event : IDragEventType) => {
+    console.log(event , "On Mouse Move");
+  } 
+
+  const onDragEnd = (event : IDragEventType) => {
+    console.log(event , "On Mouse Up");
+  }
+
   return (
     <Draggable 
     defaultClassNames='dragger-component-new-own' 
@@ -26,8 +39,10 @@ const App = () => {
     classNamesOnMouseMove='mouse-move-classname'
     classNamesOnMouseUp='mouse-up-classname'
     Children={DraggableComponent} 
-    initialPosition={{x : 50 , y : 100}} 
-    boundary='body' />
+    onDragStart={onDragStart}
+    onDrag={onDrag}
+    onDragEnd={onDragEnd}
+    boundary='.boundary' />
   )
 } 
 
