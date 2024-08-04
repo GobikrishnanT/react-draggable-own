@@ -248,7 +248,7 @@ const Draggable = (props : IDraggable) => {
     // Poof! No more selection. Now the mouse up event can work its magic!
     collapseSelectionIfExists();
 
-    // Heads up! Listening to mouse move and mouse down events on the document, not the draggable element, to keep things smooth and speedy!
+    // Heads up! Listening to mouse move and mouse down events on the document, not on the draggable element, to keep things smooth and speedy!
     listenMouseMove();
     listenMouseUp();
   } , []);
