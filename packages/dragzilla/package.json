@@ -1,0 +1,32 @@
+{
+  "name": "dragzilla",
+  "version": "1.0.0",
+  "description": "\"Dragzilla\" is a React package for draggable components that uses positions instead of the transform property. This ensures elements stay in the same viewport, providing a stable and consistent experience. \"Dragzilla\" offers a robust solution for all your draggable needs.",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GobikrishnanT/react-draggable-own.git"
+  },
+  "keywords": [
+    "dragzilla",
+    "drag",
+    "drag-using-position",
+    "draggable",
+    "draggable-react",
+    "react-draggable"
+  ],
+  "author": "Gobikrishnan T",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GobikrishnanT/react-draggable-own/issues"
+  },
+  "homepage": "https://github.com/GobikrishnanT/react-draggable-own#readme",
+  "devDependencies": {
+    "tsup": "^8.2.4"
+  }
+}
