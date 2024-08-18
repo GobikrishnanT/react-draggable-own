@@ -27,7 +27,8 @@ interface IDraggable {
   onDrag?:(eventData : IDragEventType) => void;
 }
 
-const Draggable = (props : IDraggable) => {
+const Dragzilla = (props : IDraggable) => {
+  console.log(props);
   const {Children} = props;
 
   // Behold, the mighty dragState! Our main hero for the entire drag saga.
@@ -121,14 +122,14 @@ const Draggable = (props : IDraggable) => {
   const setPosition = () => {
     setDragState((prevDragState) => {
       // x position : 
-      const finalLeft = getNewDragPositionX(getPositionX(props.boundary , prevDragState));
+      const finalLeft = getNewDragPositionX(getPositionX(Boolean(getBoundaryElem()) ?? false, prevDragState));
       if(finalLeft) {
         prevDragState.setLastMouseMoveX(prevDragState.getActualX())
         prevDragState.setActualX(finalLeft);
       }
 
       // y position : 
-      const finalTop = getNewDragPositionY(getPositionY(props.boundary , prevDragState));
+      const finalTop = getNewDragPositionY(getPositionY(Boolean(getBoundaryElem()) ?? false , prevDragState));
       if(finalTop) {
         prevDragState.setLastMouseMoveY(prevDragState.actualY);
         prevDragState.setActualY(finalTop);
@@ -261,6 +262,8 @@ const Draggable = (props : IDraggable) => {
       if(handle) {
         addEv(handle , 'mousedown' , onMouseDown);
         return true;
+      }else{
+        console.warn("🚨 Poff! Handle not found! The whole container is now draggable! 🕺💨");
       }
     }
 
@@ -310,7 +313,7 @@ const Draggable = (props : IDraggable) => {
     const draggable = getDraggableContainer();
     if(!draggable || props.disabled) return ;
 
-    listenMouseDown();
+    listenMouseDown() ;
 
     // If a boundary is provided, ensure the draggable element remains within it.
     checkBoundaryAndSetPosition();
@@ -333,4 +336,4 @@ const Draggable = (props : IDraggable) => {
   )
 }
 
-export default Draggable;
+export default Dragzilla;

@@ -1,0 +1,38 @@
+.draggable-elem {
+    width: 500px;
+    height: 300px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background: linear-gradient(to right, #2af598, #009efd);
+}
+
+.draggable-handle {
+    width: 20%;
+    background-color: #2af598;
+}
+
+.display-flex {
+    display: flex;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+.boundary {
+    width: 70%;
+    height: calc(100vh - 100px);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border: 2px dotted black;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
