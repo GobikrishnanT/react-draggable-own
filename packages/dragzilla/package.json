@@ -22,7 +22,7 @@
     "react-draggable"
   ],
   "author": "Gobikrishnan T",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/GobikrishnanT/react-draggable-own/issues"
   },
