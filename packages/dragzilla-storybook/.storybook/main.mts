@@ -9,10 +9,6 @@ const config: StorybookConfig = {
   core: {
     builder: '@storybook/builder-vite',
   },
-  docs: {
-    //👇 See the table below for the list of supported options
-    defaultName: 'Documentation',
-  },
   async viteFinal(config) {
     const { mergeConfig } = await import('vite');
     return mergeConfig(config , {
