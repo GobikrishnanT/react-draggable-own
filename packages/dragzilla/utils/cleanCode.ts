@@ -11,13 +11,12 @@ export const getStyleObj = (x : number , y : number) => {
     }
 }
 
-export const getPositionX = (boundary : string | undefined , dragState : DragState) => {
+export const getPositionX = (boundary : boolean, dragState : DragState) => {
     let xPositionConfig : IPositionX = {
         initX : dragState.initX,
         lastMouseMoveX : dragState.lastMouseMoveX,
         mouseDownX : dragState.mouseDownX,
         mouseMoveX : dragState.mouseMoveX,
-        actualX : dragState.actualX
       }
       if(boundary) {
         xPositionConfig = Object.assign(xPositionConfig , {
@@ -30,7 +29,7 @@ export const getPositionX = (boundary : string | undefined , dragState : DragSta
     return xPositionConfig;
 }
 
-export const getPositionY = (boundary : string | undefined , dragState : DragState) => {
+export const getPositionY = (boundary : boolean , dragState : DragState) => {
     let yPositionConfig : IPositionY = {
         initY : dragState.initY,
         lastMouseMoveY : dragState.lastMouseMoveY,

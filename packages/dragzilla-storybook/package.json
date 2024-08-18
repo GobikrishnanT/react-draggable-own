@@ -1,0 +1,25 @@
+{
+  "name": "dragzilla-storybook",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "sb dev"
+  },
+  "author": "Gobikrishnan T",
+  "license": "ISC",
+  "dependencies": {
+    "@storybook/addon-actions": "^8.2.9",
+    "dragzilla": "workspace:*"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^8.2.7",
+    "@storybook/addon-links": "^8.2.7",
+    "@storybook/builder-vite": "^8.2.7",
+    "@storybook/react": "^8.2.7",
+    "@storybook/react-vite": "^8.2.7",
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.3.5"
+  }
+}

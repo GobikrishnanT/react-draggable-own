@@ -2,10 +2,11 @@
   "name": "dragzilla",
   "version": "1.0.0",
   "description": "\"Dragzilla\" is a React package for draggable components that uses positions instead of the transform property. This ensures elements stay in the same viewport, providing a stable and consistent experience. \"Dragzilla\" offers a robust solution for all your draggable needs.",
-  "main": "index.js",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsup --watch",
     "build": "tsup"
   },
   "repository": {
